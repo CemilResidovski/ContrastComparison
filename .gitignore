@@ -1,0 +1,4 @@
+.venv/pyvenv.cfg
+.venv/Scripts/pythonw.exe
+.venv/Scripts/python.exe
+__pycache__/html.cpython-39.pyc
