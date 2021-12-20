@@ -1,5 +1,4 @@
 import streamlit as st
-from collections import defaultdict
 import json
 
 # import wcag_auto
