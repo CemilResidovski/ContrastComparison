@@ -1,11 +1,12 @@
 import streamlit as st
 import json
 import html
+import yiq
+import wcag_auto
 
 header = st.container()
 inputs = st.container()
 
-# fetching the result file and caching
 @st.cache()
 def fetch_yiq():
     with open("result_yiq.json", "r") as f:
@@ -33,9 +34,9 @@ with inputs:
     fg, bg = st.columns(2)
 
     ### WCAG ###
-    # wcag_color, wcag_contrast = wcag_auto.getContrastColor(bg_c)
-    wcag = fetch_wcag()
-    wcag_color, wcag_contrast = wcag[r][g][b]
+    wcag_color, wcag_contrast = wcag_auto.getContrastColor(bg_c)
+    # wcag = fetch_wcag()
+    # wcag_color, wcag_contrast = wcag[r][g][b]
 
     fg.subheader("WCAG")
     # fg.text(html_boxes.wcag(bg_c, wcag_color))
@@ -44,9 +45,9 @@ with inputs:
     fg.text(f"Contrast: {wcag_contrast}:1")
 
     ### YIQ ###
-    # yiq_color, yiq_result = yiq.getContrastColor(bg_c)
-    yiq = fetch_yiq()
-    yiq_color, yiq_result = yiq[r][g][b]
+    yiq_color, yiq_result = yiq.getContrastColor(bg_c)
+    # yiq = fetch_yiq()
+    # yiq_color, yiq_result = yiq[r][g][b]
 
     bg.subheader("YIQ")
     yiq_contrast = html.result(bg_c, yiq_color)
