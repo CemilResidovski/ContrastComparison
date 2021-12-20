@@ -1,8 +1,5 @@
 import streamlit as st
 import json
-
-# import wcag_auto
-# import yiq
 import html
 
 header = st.container()
