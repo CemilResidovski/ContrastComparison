@@ -5,7 +5,7 @@ import html
 header = st.container()
 inputs = st.container()
 
-
+# fetching the result file and caching
 @st.cache()
 def fetch_yiq():
     with open("result_yiq.json", "r") as f:
