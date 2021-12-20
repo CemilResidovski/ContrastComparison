@@ -1,6 +1,6 @@
 import streamlit as st
 import json
-import html
+import html_formatting
 import yiq
 import wcag_auto
 
@@ -40,7 +40,7 @@ with inputs:
 
     fg.subheader("WCAG")
     # fg.text(html_boxes.wcag(bg_c, wcag_color))
-    wcag_contrast_box = html.result(bg_c, wcag_color)
+    wcag_contrast_box = html_formatting.result(bg_c, wcag_color)
     fg.markdown(wcag_contrast_box, unsafe_allow_html=True)
     fg.text(f"Contrast: {wcag_contrast}:1")
 
@@ -50,9 +50,9 @@ with inputs:
     # yiq_color, yiq_result = yiq[r][g][b]
 
     bg.subheader("YIQ")
-    yiq_contrast = html.result(bg_c, yiq_color)
+    yiq_contrast = html_formatting.result(bg_c, yiq_color)
     bg.markdown(yiq_contrast, unsafe_allow_html=True)
     bg.text(f"YIQ result: {round(yiq_result, 2)}")
 
     info = st.expander("About")
-    info.write(html.info())
+    info.write(html_formatting.info())
