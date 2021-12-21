@@ -1,11 +1,13 @@
 import streamlit as st
 import json
-import html_formatting
+import html_boxes
 import yiq
 import wcag_auto
+import random
 
 header = st.container()
 inputs = st.container()
+
 
 @st.cache()
 def fetch_yiq():
@@ -24,7 +26,8 @@ with header:
     st.write(
         "Compare [WCAG](https://www.w3.org/TR/WCAG20-TECHS/G18.html) (ISO-9241) with [YIQ](https://24ways.org/2010/calculating-color-contrast) color contrast"
     )
-    bg_c = st.color_picker("Choose the background color", "#FFFFFF")
+    random_colors = ["#009F75", "#EF4444", "#D54799", "#FF0066"]
+    bg_c = st.color_picker("Choose the background color", random.choice(random_colors))
     st.text(bg_c.upper())
 
     r, g, b = str(int(bg_c[1:3], 16)), str(int(bg_c[3:5], 16)), str(int(bg_c[5:], 16))
@@ -40,7 +43,7 @@ with inputs:
 
     fg.subheader("WCAG")
     # fg.text(html_boxes.wcag(bg_c, wcag_color))
-    wcag_contrast_box = html_formatting.result(bg_c, wcag_color)
+    wcag_contrast_box = html_boxes.result(bg_c, wcag_color)
     fg.markdown(wcag_contrast_box, unsafe_allow_html=True)
     fg.text(f"Contrast: {wcag_contrast}:1")
 
@@ -50,9 +53,11 @@ with inputs:
     # yiq_color, yiq_result = yiq[r][g][b]
 
     bg.subheader("YIQ")
-    yiq_contrast = html_formatting.result(bg_c, yiq_color)
+    yiq_contrast = html_boxes.result(bg_c, yiq_color)
     bg.markdown(yiq_contrast, unsafe_allow_html=True)
     bg.text(f"YIQ result: {round(yiq_result, 2)}")
 
-    info = st.expander("About")
-    info.write(html_formatting.info())
+    info = st.expander("So what's all this then?")
+    info_text = html_boxes.info()
+    info.markdown(info_text, unsafe_allow_html=True)
+    # info.write(html_formatting.info())
