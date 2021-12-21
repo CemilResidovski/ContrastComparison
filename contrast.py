@@ -21,14 +21,24 @@ def fetch_wcag():
         return json.load(f)
 
 
+# @st.cache()
+def get_random_color(prev_color):
+    random_colors = ["#009F75", "#D54799", "#FF0066", "#5D74CB", "#7E8712"]
+    return random.choice(random_colors)
+
+
 with header:
     st.header("Combined color contrast comparator")
     st.write(
         "Compare [WCAG](https://www.w3.org/TR/WCAG20-TECHS/G18.html) (ISO-9241) with [YIQ](https://24ways.org/2010/calculating-color-contrast) color contrast"
     )
-    random_colors = ["#009F75", "#EF4444", "#D54799", "#FF0066"]
-    bg_c = st.color_picker("Choose the background color", random.choice(random_colors))
-    st.text(bg_c.upper())
+
+    left, right = st.columns(2)
+    bg_c = left.color_picker("Choose the background color", "#009F75")
+    left.text(bg_c.upper())
+
+    if right.button("Get random conflicting color"):
+        bg_c = get_random_color(bg_c)
 
     r, g, b = str(int(bg_c[1:3], 16)), str(int(bg_c[3:5], 16)), str(int(bg_c[5:], 16))
 

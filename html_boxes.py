@@ -12,5 +12,5 @@ def info():
     You can see it as essentially "According to the background color, should this text have dark or bright color?"<br><br>
     There's a couple of different ways to calculate the luminance of colors, and thereof the contrast between them for better accessibility, here there's according to WCAG's guidelines and YIQ's color space.<br><br>
     There's nothing really bad about WCAG guidelines (fun fact, for any solid background color, white or black text will always offer a WCAG-compliant contrast higher than 4.5:1! AA standard for normal text will always be fulfilled), I just sometimes prefer the YIQ result, and you might too.<br><br>
-    You can keep refreshing this page to get random colors where WCAG and YIQ returns different "best text color" due to their results."""
+    You can keep pressing the button above to get random colors where WCAG and YIQ returns different "best text color" due to their results."""
     return info
