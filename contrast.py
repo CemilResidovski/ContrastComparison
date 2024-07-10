@@ -76,7 +76,7 @@ with inputs:
     bg.markdown(yiq_contrast, unsafe_allow_html=True)
     # if yiq_color != wcag_color:
 
-    bg.write(f"YIQ result: {round(yiq_result, 2)}, {test}")
+    bg.write(f"YIQ result: {round(yiq_result, 2)}")
 
     info = st.expander("So what's all this then?")
     info_text = html_boxes.info()
