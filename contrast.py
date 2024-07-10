@@ -62,7 +62,7 @@ with inputs:
 
     fg.subheader("WCAG")
     # fg.text(html_boxes.wcag(bg_c, wcag_color))
-    wcag_contrast_box = html_boxes.result(bg_c, wcag_color)
+    wcag_contrast_box = html_boxes.result(bg_c, wcag_color, wcag_contrast)
     fg.markdown(wcag_contrast_box, unsafe_allow_html=True)
     fg.write(f"Contrast: {wcag_contrast}:1. {fetch_wcag_reqs(wcag_contrast)}")
 
