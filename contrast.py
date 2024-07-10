@@ -25,9 +25,9 @@ def fetch_wcag_reqs(contrast):
     if contrast >= 7:
         return "  \nContrast higher than 7.  \nLevel AAA reached for normal text."
     elif contrast >= 4.5:
-        return "  \nContrast higher than 4.5.  \nLevel AAA reached for large text, AA for normal text."
+        return "  \nContrast higher than 4.5, lower than 7.  \nLevel AAA reached for large text, AA for normal text."
     elif contrast >= 3:
-        return "  \nContrast higher than 3.  \nLevel AA reached for large text and requirements for graphics and user interface components met."
+        return "  \nContrast higher than 3, lower than 4.5.  \nLevel AA reached for large text and requirements for graphics and user interface components met."
 
 
 # @st.cache()
