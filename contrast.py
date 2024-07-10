@@ -76,11 +76,13 @@ with inputs:
     bg.markdown(yiq_contrast, unsafe_allow_html=True)
     if yiq_color != wcag_color:
         yiq_contrast = wcag_auto.getContrastColor(bg_c, True)
+        bg.write(
+            f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {yiq_contrast}:1. {fetch_wcag_reqs(yiq_contrast)}"
+        )
     else:
-        yiq_contrast = wcag_contrast
-    bg.write(
-        f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {yiq_contrast}:1. {fetch_wcag_reqs(yiq_contrast)}"
-    )
+        bg.write(
+            f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {yiq_contrast}:1."
+        )
 
     info = st.expander("So what's all this then?")
     info_text = html_boxes.info()
