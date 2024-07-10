@@ -22,8 +22,6 @@ def fetch_wcag():
 
 
 def fetch_wcag_reqs(contrast):
-    ### 4.5:1 for normal text and 3:1 for large text. WCAG 2.1 requires a contrast ratio of at least 3:1 for graphics and user interface components
-    # (such as form input borders). WCAG Level AAA requires a contrast ratio of at least 7:1 for normal text and 4.5:1 for large text.###
     if contrast >= 7:
         return "Contrast higher than 7, level AAA reached for normal text"
     elif contrast >= 4.5:
@@ -66,7 +64,7 @@ with inputs:
     # fg.text(html_boxes.wcag(bg_c, wcag_color))
     wcag_contrast_box = html_boxes.result(bg_c, wcag_color)
     fg.markdown(wcag_contrast_box, unsafe_allow_html=True)
-    fg.text(f"Contrast: {wcag_contrast}:1 - {fetch_wcag_reqs(wcag_contrast)}")
+    fg.write(f"Contrast: {wcag_contrast}:1 - {fetch_wcag_reqs(wcag_contrast)}")
 
     ### YIQ ###
     yiq_color, yiq_result = yiq.getContrastColor(bg_c)
@@ -76,10 +74,9 @@ with inputs:
     bg.subheader("YIQ")
     yiq_contrast = html_boxes.result(bg_c, yiq_color)
     bg.markdown(yiq_contrast, unsafe_allow_html=True)
-    test = "b"
-    if yiq_color != wcag_color:
-        test = "a"
-    bg.text(f"YIQ result: {round(yiq_result, 2)}, {test}")
+    # if yiq_color != wcag_color:
+
+    bg.write(f"YIQ result: {round(yiq_result, 2)}, {test}")
 
     info = st.expander("So what's all this then?")
     info_text = html_boxes.info()
