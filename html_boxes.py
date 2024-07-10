@@ -5,6 +5,8 @@ def result(background_color, color, contrast):
         res = ["(AAA ✅)", "(AA ✅)"]
     elif contrast >= 3:
         res = ["(AA ✅)", "(AA ❌)"]
+    else:
+        res = ["(AA ❌)", "(AA ❌)"]
     result = f"""<div style='background-color:{background_color};color:{color};
     margin-left:auto;margin-right:auto;text-align:center;vertical-align:middle;'>
     <p style='font-size:24px;'>Large text {res[0]}</p>
