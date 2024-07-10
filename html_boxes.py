@@ -1,9 +1,15 @@
-def result(background_color, color):
+def result(background_color, color, contrast):
+    if contrast >= 7:
+        res = ["(AAA :white_check_mark:)", "(AAA :white_check_mark:)"]
+    elif contrast >= 4.5:
+        res = ["(AAA :white_check_mark:)", "(AA :white_check_mark:)"]
+    elif contrast >= 3:
+        res = ["(AA :white_check_mark:)", "(AA :x:)"]
     result = f"""<div style='background-color:{background_color};color:{color};
     margin-left:auto;margin-right:auto;text-align:center;vertical-align:middle;'>
-    <p style='font-size:24px;'>Large text (AA)</p>
-    <p style='font-size:18.5px;font-weight:bold;'>Large text (AA)</p>
-    <p style="font-size:18.5px;">Normal text (AAA)</p></div>"""
+    <p style='font-size:24px;'>Large text {res[0]}</p>
+    <p style='font-size:18.5px;font-weight:bold;'>Large text {res[0]}</p>
+    <p style="font-size:18.5px;">Normal text {res[1]}</p></div>"""
     return result
 
 
