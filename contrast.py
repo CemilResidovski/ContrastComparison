@@ -23,11 +23,11 @@ def fetch_wcag():
 
 def fetch_wcag_reqs(contrast):
     if contrast >= 7:
-        return "Contrast higher than 7, level AAA reached for normal text"
+        return "  /nContrast higher than 7, level AAA reached for normal text"
     elif contrast >= 4.5:
-        return "Contrast higher than 4.5, level AAA reached for large text, AA for normal text"
+        return "  /nContrast higher than 4.5, level AAA reached for large text, AA for normal text"
     elif contrast >= 3:
-        return "Contrast higher than 3, level AA reached for large text and requirements for graphics and user interface components met"
+        return "  /nContrast higher than 3, level AA reached for large text and requirements for graphics and user interface components met"
 
 
 # @st.cache()
@@ -64,7 +64,7 @@ with inputs:
     # fg.text(html_boxes.wcag(bg_c, wcag_color))
     wcag_contrast_box = html_boxes.result(bg_c, wcag_color)
     fg.markdown(wcag_contrast_box, unsafe_allow_html=True)
-    fg.write(f"Contrast: {wcag_contrast}:1 - {fetch_wcag_reqs(wcag_contrast)}")
+    fg.write(f"Contrast: {wcag_contrast}:1. {fetch_wcag_reqs(wcag_contrast)}")
 
     ### YIQ ###
     yiq_color, yiq_result = yiq.getContrastColor(bg_c)
