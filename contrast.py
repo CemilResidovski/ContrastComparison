@@ -81,7 +81,7 @@ with inputs:
         )
     else:
         bg.write(
-            f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {yiq_contrast}:1."
+            f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {wcag_contrast}:1."
         )
 
     info = st.expander("So what's all this then?")
