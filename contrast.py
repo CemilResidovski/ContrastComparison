@@ -72,12 +72,10 @@ with inputs:
     # yiq_color, yiq_result = yiq[r][g][b]
 
     bg.subheader("YIQ")
-    if yiq_color != wcag_color:
-        yiq_contrast_c = wcag_auto.getContrastColor(bg_c, True)
+    yiq_contrast_c = wcag_auto.getContrastColor(bg_c, True)
     yiq_contrast = html_boxes.result(bg_c, yiq_color, yiq_contrast_c)
     bg.markdown(yiq_contrast, unsafe_allow_html=True)
     if yiq_color != wcag_color:
-        yiq_contrast_c = wcag_auto.getContrastColor(bg_c, True)
         bg.write(
             f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {yiq_contrast_c}:1. {fetch_wcag_reqs(yiq_contrast_c)}"
         )
