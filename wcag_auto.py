@@ -1,4 +1,4 @@
-def getContrastColor(bg_color, yiq=False):
+def get_contrast_color(bg_color, yiq=False):
     # bg RGB
     bg_color = [int(bg_color[1:3], 16), int(bg_color[3:5], 16), int(bg_color[5:], 16)]
 
@@ -17,6 +17,7 @@ def getContrastColor(bg_color, yiq=False):
     bg_norm = normalize(bg_color)
 
     # Calc contrast ratio
+    # Using the luminocity method here from ATSC standards (HDTV)
     def get_luminance(c):
         return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
 

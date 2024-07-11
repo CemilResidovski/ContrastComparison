@@ -47,14 +47,14 @@ with header:
     if right.button("Get random conflicting color"):
         bg_c = get_random_color(bg_c)
 
-    r, g, b = str(int(bg_c[1:3], 16)), str(int(bg_c[3:5], 16)), str(int(bg_c[5:], 16))
+    # r, g, b = str(int(bg_c[1:3], 16)), str(int(bg_c[3:5], 16)), str(int(bg_c[5:], 16))
 
 with inputs:
 
     fg, bg = st.columns(2)
 
     ### WCAG ###
-    wcag_color, wcag_contrast = wcag_auto.getContrastColor(bg_c)
+    wcag_color, wcag_contrast = wcag_auto.get_contrast_color(bg_c)
 
     fg.subheader("WCAG")
     wcag_contrast_box = html_boxes.result(bg_c, wcag_color, wcag_contrast)
@@ -62,25 +62,23 @@ with inputs:
     fg.write(f"Contrast: {wcag_contrast}:1. {fetch_wcag_reqs(wcag_contrast)}")
 
     ### YIQ ###
-    yiq_color, yiq_result = yiq.getContrastColor(bg_c)
+    yiq_color, yiq_result = yiq.get_contrast_color(bg_c)
 
     bg.subheader("YIQ")
+    yiq_result_text = f"YIQ result: {round(yiq_result, 2)}. "
 
     if yiq_color != wcag_color:
-        yiq_contrast = wcag_auto.getContrastColor(bg_c, True)
+        yiq_contrast = wcag_auto.get_contrast_color(bg_c, True)
+        yiq_result_text += (
+            f"WCAG contrast: {yiq_contrast}:1. {fetch_wcag_reqs(yiq_contrast)}"
+        )
     else:
         yiq_contrast = wcag_contrast
+        yiq_result_text += f"WCAG contrast: {yiq_contrast}:1."
 
     yiq_contrast_box = html_boxes.result(bg_c, yiq_color, yiq_contrast)
     bg.markdown(yiq_contrast_box, unsafe_allow_html=True)
-    if yiq_color != wcag_color:
-        bg.write(
-            f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {yiq_contrast}:1. {fetch_wcag_reqs(yiq_contrast)}"
-        )
-    else:
-        bg.write(
-            f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {yiq_contrast}:1."
-        )
+    bg.write(yiq_result_text)
 
     info = st.expander("So what's all this then?")
     info_text = html_boxes.info()
