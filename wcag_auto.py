@@ -43,9 +43,9 @@ def get_best_color(c):
         ratio_white = c / lum_white
 
     return (
-        ["black", round(ratio_black, 2)]
+        ["black", round(ratio_black, 1)]
         if (ratio_black > ratio_white)
-        else ["white", round(ratio_white, 2)]
+        else ["white", round(ratio_white, 1)]
     )
 
 
@@ -64,5 +64,5 @@ def get_yiq_contrast(c):
         ratio_white = c / lum_white
 
     return (
-        round(ratio_black, 2) if (ratio_black < ratio_white) else round(ratio_white, 2)
+        round(ratio_black, 1) if (ratio_black < ratio_white) else round(ratio_white, 1)
     )

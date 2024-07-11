@@ -35,17 +35,22 @@ def get_random_color(prev_color):
 
 
 with header:
+    st.session_state.color_picker = "#009F75"
     st.header("Combined color contrast comparator")
     st.write(
         "Compare [WCAG](https://www.w3.org/TR/WCAG20-TECHS/G18.html) (ISO-9241) with [YIQ](https://24ways.org/2010/calculating-color-contrast) color contrast.  \n\nBasically, for a given background color, will white or black foreground text color be more visible?"
     )
 
     left, right = st.columns(2)
-    bg_c = left.color_picker("Choose the background color", "#009F75")
-    left.text(bg_c.upper())
+    bg_c = left.color_picker(
+        "Choose the background color", "#009F75", key="color_picker"
+    ).upper()
+    left.text(bg_c)
+    st.session_state.color_picker = bg_c
 
     if right.button("Get random conflicting color"):
         bg_c = get_random_color(bg_c)
+        st.session_state.color_picker = bg_c
 
     r, g, b = str(int(bg_c[1:3], 16)), str(int(bg_c[3:5], 16)), str(int(bg_c[5:], 16))
 
