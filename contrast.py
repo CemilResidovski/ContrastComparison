@@ -80,6 +80,6 @@ with inputs:
             f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {yiq_contrast}:1."
         )
 
-info = st.expander("So what's all this then?")
-info_text = html_boxes.info()
-info.markdown(info_text, unsafe_allow_html=True)
+    info = st.expander("So what's all this then?")
+    info_text = html_boxes.info()
+    info.markdown(info_text, unsafe_allow_html=True)
