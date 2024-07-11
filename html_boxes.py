@@ -9,9 +9,9 @@ def result(background_color, color, contrast):
         res = ["(AA ❌)", "(AA ❌)"]
     result = f"""<div style='background-color:{background_color};color:{color};
     margin-left:auto;margin-right:auto;text-align:center;vertical-align:middle;'>
-    <p style='background-color:red;font-size:18pt !important;'>Large text {res[0]}</p>
-    <p style='font-size:14pt !important;font-weight:bold !important;'>Large text {res[0]}</p>
-    <p style="font-size:14pt !important;">Normal text {res[1]}</p></div>"""
+    <p style='font-size:18pt;'>Large text {res[0]}</p>
+    <p style='font-size:14pt; font-weight:bold;'>Large text {res[0]}</p>
+    <p style="font-size:14pt;">Normal text {res[1]}</p></div>"""
     return result
 
 
