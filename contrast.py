@@ -35,32 +35,25 @@ def get_random_color(prev_color):
 
 
 with header:
-    st.session_state.color_picker = "#009F75"
     st.header("Combined color contrast comparator")
     st.write(
         "Compare [WCAG](https://www.w3.org/TR/WCAG20-TECHS/G18.html) (ISO-9241) with [YIQ](https://24ways.org/2010/calculating-color-contrast) color contrast.  \n\nBasically, for a given background color, will white or black foreground text color be more visible?"
     )
 
     left, right = st.columns(2)
-    bg_c = left.color_picker(
-        "Choose the background color", "#009F75", key="color_picker"
-    ).upper()
+    bg_c = left.color_picker("Choose the background color", "#009F75").upper()
     left.text(bg_c)
-    st.session_state.color_picker = bg_c
 
     if right.button("Get random conflicting color"):
         bg_c = get_random_color(bg_c)
-        st.session_state.color_picker = bg_c
 
     r, g, b = str(int(bg_c[1:3], 16)), str(int(bg_c[3:5], 16)), str(int(bg_c[5:], 16))
 
 with inputs:
-
     fg, bg = st.columns(2)
 
     ### WCAG ###
     wcag_color, wcag_contrast = wcag_auto.getContrastColor(bg_c)
-
     fg.subheader("WCAG")
     wcag_contrast_box = html_boxes.result(bg_c, wcag_color, wcag_contrast)
     fg.markdown(wcag_contrast_box, unsafe_allow_html=True)
@@ -68,7 +61,6 @@ with inputs:
 
     ### YIQ ###
     yiq_color, yiq_result = yiq.getContrastColor(bg_c)
-
     bg.subheader("YIQ")
 
     if yiq_color != wcag_color:
@@ -78,6 +70,7 @@ with inputs:
 
     yiq_contrast_box = html_boxes.result(bg_c, yiq_color, yiq_contrast)
     bg.markdown(yiq_contrast_box, unsafe_allow_html=True)
+
     if yiq_color != wcag_color:
         bg.write(
             f"YIQ result: {round(yiq_result, 2)}. WCAG contrast: {yiq_contrast}:1. {fetch_wcag_reqs(yiq_contrast)}"
@@ -89,4 +82,5 @@ with inputs:
 
     info = st.expander("So what's all this then?")
     info_text = html_boxes.info()
-    info.markdown(info_text, unsafe_allow_html=True)
+
+info.markdown(info_text, unsafe_allow_html=True)
