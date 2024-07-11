@@ -1,5 +1,4 @@
 import streamlit as st
-import json
 import html_boxes
 import yiq
 import wcag_auto
@@ -7,18 +6,6 @@ import random
 
 header = st.container()
 inputs = st.container()
-
-
-@st.cache()
-def fetch_yiq():
-    with open("result_yiq.json", "r") as f:
-        return json.load(f)
-
-
-@st.cache()
-def fetch_wcag():
-    with open("result_wcag.json", "r") as f:
-        return json.load(f)
 
 
 def fetch_wcag_reqs(contrast):
@@ -30,10 +17,12 @@ def fetch_wcag_reqs(contrast):
         return "  \nContrast higher than 3, lower than 4.5.  \nLevel AA reached for large text and requirements for graphics and user interface components met."
 
 
-# @st.cache()
 def get_random_color(prev_color):
-    random_colors = ["#009F75", "#D54799", "#FF0066", "#5D74CB", "#7E8712"]
-    return random.choice(random_colors)
+    random_colors = ["#009F75", "#D54799", "#FF0066", "#5D74CB", "#7E8712", "#777777"]
+    r_c = random.choice(random_colors)
+    while r_c == prev_color:
+        r_c = random.choice(random_colors)
+    return r_c
 
 
 with header:
@@ -57,11 +46,8 @@ with inputs:
 
     ### WCAG ###
     wcag_color, wcag_contrast = wcag_auto.getContrastColor(bg_c)
-    # wcag = fetch_wcag()
-    # wcag_color, wcag_contrast = wcag[r][g][b]
 
     fg.subheader("WCAG")
-    # fg.text(html_boxes.wcag(bg_c, wcag_color))
     wcag_contrast_box = html_boxes.result(bg_c, wcag_color, wcag_contrast)
     fg.markdown(wcag_contrast_box, unsafe_allow_html=True)
     fg.write(f"Contrast: {wcag_contrast}:1. {fetch_wcag_reqs(wcag_contrast)}")
@@ -90,4 +76,3 @@ with inputs:
     info = st.expander("So what's all this then?")
     info_text = html_boxes.info()
     info.markdown(info_text, unsafe_allow_html=True)
-    # info.write(html_formatting.info())
