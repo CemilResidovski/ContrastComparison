@@ -34,10 +34,6 @@ def getContrastColor(fg_color, bg_color):
 
     print(f"L blac: {L_f}")
     print(f"L white: {L_b}")
-    # return round(ratio, 2)
-    # alternatively, if contrast is strictly more than 5, return black color, else white
-    # this seems very suspicious, is there always a contrast higher than 5? what about perfect grey?
-    # calculate luminance for black and white (once) then compare background color with bolthf
 
 
 getContrastColor("#000000", "#FFFFFF")
