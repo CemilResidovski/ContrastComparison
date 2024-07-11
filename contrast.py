@@ -18,7 +18,17 @@ def fetch_wcag_reqs(contrast):
 
 
 def get_random_color(prev_color):
-    random_colors = ["#009F75", "#D54799", "#FF0066", "#5D74CB", "#7E8712", "#777777"]
+    random_colors = [
+        "#009F75",
+        "#D54799",
+        "#FF0066",
+        "#5D74CB",
+        "#7E8712",
+        "#777777",
+        "#FF00FF",
+        "#FF0000",
+        "#239E9E",
+    ]
     if prev_color in random_colors:
         random_colors.remove(prev_color)
     return random.choice(random_colors)
