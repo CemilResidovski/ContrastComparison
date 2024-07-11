@@ -39,7 +39,7 @@ def get_random_color(prev_color):
 with header:
     st.header("Combined color contrast comparator")
     st.write(
-        "Compare [WCAG](https://www.w3.org/TR/WCAG20-TECHS/G18.html) (ISO-9241) with [YIQ](https://24ways.org/2010/calculating-color-contrast) color contrast"
+        "Compare [WCAG](https://www.w3.org/TR/WCAG20-TECHS/G18.html) (ISO-9241) with [YIQ](https://24ways.org/2010/calculating-color-contrast) color contrast.  \n\nBasically, for a given background color, will white or black foreground text color be more visible?"
     )
 
     left, right = st.columns(2)
