@@ -1,7 +1,7 @@
 import streamlit as st
 import html_boxes
 import yiq
-import wcag_auto
+import wcag
 import random
 
 header = st.container()
@@ -47,14 +47,12 @@ with header:
     if right.button("Get random conflicting color"):
         bg_c = get_random_color(bg_c)
 
-    # r, g, b = str(int(bg_c[1:3], 16)), str(int(bg_c[3:5], 16)), str(int(bg_c[5:], 16))
-
 with inputs:
 
     left, right = st.columns(2)
 
     ### WCAG ###
-    wcag_color, wcag_contrast = wcag_auto.get_contrast_color(bg_c)
+    wcag_color, wcag_contrast = wcag.get_contrast_color(bg_c)
 
     left.subheader("WCAG")
     wcag_contrast_box = html_boxes.result(bg_c, wcag_color, wcag_contrast)
@@ -68,7 +66,7 @@ with inputs:
     yiq_result_text = f"YIQ result: {round(yiq_result, 2)}. "
 
     if yiq_color != wcag_color:
-        yiq_contrast = wcag_auto.get_contrast_color(bg_c, True)
+        yiq_contrast = wcag.get_contrast_color(bg_c, True)
         yiq_result_text += (
             f"WCAG contrast: {yiq_contrast}:1. {fetch_wcag_reqs(yiq_contrast)}"
         )
@@ -81,19 +79,18 @@ with inputs:
     right.write(yiq_result_text)
 
     with st.expander("How would this look in greyscale?"):
+        greyscaled_bg_color = f"rgb({yiq_result}, {yiq_result}, {yiq_result})"
         left_grey, right_grey = st.columns(2)
         left_grey.subheader("WCAG")
         wcag_greyscale = html_boxes.result(
-            f"rgb({yiq_result}, {yiq_result}, {yiq_result})",
+            greyscaled_bg_color,
             wcag_color,
             wcag_contrast,
         )
         left_grey.markdown(wcag_greyscale, unsafe_allow_html=True)
 
         right_grey.subheader("YIQ")
-        yiq_greyscale = html_boxes.result(
-            f"rgb({yiq_result}, {yiq_result}, {yiq_result})", yiq_color, yiq_contrast
-        )
+        yiq_greyscale = html_boxes.result(greyscaled_bg_color, yiq_color, yiq_contrast)
         right_grey.markdown(yiq_greyscale, unsafe_allow_html=True)
 
     info = st.expander("So what's all this then?")
