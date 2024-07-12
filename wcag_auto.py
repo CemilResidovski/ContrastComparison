@@ -6,7 +6,7 @@ def get_contrast_color(bg_color, yiq=False):
     def normalize(color):
         color_normalized = []
         for ch in color:
-            ch = ch / 255
+            ch = ch / 255.0
             if ch <= 0.03928:
                 ch_n = ch / 12.92
             else:
@@ -29,19 +29,19 @@ def get_contrast_color(bg_color, yiq=False):
         return get_best_color(L_b)
 
 
-def get_best_color(c):
+def get_best_color(luminance):
     lum_black = 0.05
     lum_white = 1.05
 
-    if lum_black > c:
-        ratio_black = lum_black / c
+    if lum_black > luminance:
+        ratio_black = lum_black / luminance
     else:
-        ratio_black = c / lum_black
+        ratio_black = luminance / lum_black
 
-    if lum_white > c:
-        ratio_white = lum_white / c
+    if lum_white > luminance:
+        ratio_white = lum_white / luminance
     else:
-        ratio_white = c / lum_white
+        ratio_white = luminance / lum_white
 
     return (
         ["black", round(ratio_black, 1)]
