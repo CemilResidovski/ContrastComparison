@@ -52,7 +52,7 @@ with inputs:
     left, right = st.columns(2)
 
     ### WCAG ###
-    wcag_color, wcag_contrast = wcag.get_contrast_color(bg_c)
+    wcag_color, wcag_contrast, yiq_contrast = wcag.get_wcag_result(bg_c)
 
     left.subheader("WCAG")
     wcag_contrast_box = html_boxes.result(bg_c, wcag_color, wcag_contrast)
@@ -66,7 +66,6 @@ with inputs:
     yiq_result_text = f"YIQ result: {round(yiq_result, 2)}. "
 
     if yiq_color != wcag_color:
-        yiq_contrast = wcag.get_contrast_color(bg_c, True)
         yiq_result_text += (
             f"WCAG contrast: {yiq_contrast}:1. {fetch_wcag_reqs(yiq_contrast)}"
         )
@@ -81,7 +80,7 @@ with inputs:
     with st.expander("How would this look in greyscale?"):
         greyscaled_bg_color = f"rgb({yiq_result}, {yiq_result}, {yiq_result})"
         left_grey, right_grey = st.columns(2)
-        left_grey.subheader("WCAG")
+        left_grey.subheader("WCAG greyscale")
         wcag_greyscale = html_boxes.result(
             greyscaled_bg_color,
             wcag_color,
@@ -89,7 +88,7 @@ with inputs:
         )
         left_grey.markdown(wcag_greyscale, unsafe_allow_html=True)
 
-        right_grey.subheader("YIQ")
+        right_grey.subheader("YIQ greyscale")
         yiq_greyscale = html_boxes.result(greyscaled_bg_color, yiq_color, yiq_contrast)
         right_grey.markdown(yiq_greyscale, unsafe_allow_html=True)
 
