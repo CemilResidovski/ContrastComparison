@@ -1,3 +1,8 @@
+def hex_to_rgb(color):
+    color = color.lstrip("#")
+    return tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
+
+
 def result(background_color, color, contrast):
     if contrast >= 7:
         res = ["(AAA ✅)", "(AAA ✅)"]

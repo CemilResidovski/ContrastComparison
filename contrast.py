@@ -1,5 +1,5 @@
 import streamlit as st
-import html_boxes
+import utils
 import yiq
 import wcag
 import random
@@ -55,7 +55,7 @@ with inputs:
     wcag_color, wcag_contrast, yiq_contrast = wcag.get_wcag_result(bg_c)
 
     left.subheader("WCAG")
-    wcag_contrast_box = html_boxes.result(bg_c, wcag_color, wcag_contrast)
+    wcag_contrast_box = utils.result(bg_c, wcag_color, wcag_contrast)
     left.markdown(wcag_contrast_box, unsafe_allow_html=True)
     left.write(f"Contrast: {wcag_contrast}:1. {fetch_wcag_reqs(wcag_contrast)}")
 
@@ -73,7 +73,7 @@ with inputs:
         yiq_contrast = wcag_contrast
         yiq_result_text += f"WCAG contrast: {yiq_contrast}:1."
 
-    yiq_contrast_box = html_boxes.result(bg_c, yiq_color, yiq_contrast)
+    yiq_contrast_box = utils.result(bg_c, yiq_color, yiq_contrast)
     right.markdown(yiq_contrast_box, unsafe_allow_html=True)
     right.write(yiq_result_text)
 
@@ -81,7 +81,7 @@ with inputs:
         greyscaled_bg_color = f"rgb({yiq_result}, {yiq_result}, {yiq_result})"
         left_grey, right_grey = st.columns(2)
         left_grey.subheader("WCAG greyscale")
-        wcag_greyscale = html_boxes.result(
+        wcag_greyscale = utils.result(
             greyscaled_bg_color,
             wcag_color,
             wcag_contrast,
@@ -89,9 +89,9 @@ with inputs:
         left_grey.markdown(wcag_greyscale, unsafe_allow_html=True)
 
         right_grey.subheader("YIQ greyscale")
-        yiq_greyscale = html_boxes.result(greyscaled_bg_color, yiq_color, yiq_contrast)
+        yiq_greyscale = utils.result(greyscaled_bg_color, yiq_color, yiq_contrast)
         right_grey.markdown(yiq_greyscale, unsafe_allow_html=True)
 
     info = st.expander("So what's all this then?")
-    info_text = html_boxes.info()
+    info_text = utils.info()
     info.markdown(info_text, unsafe_allow_html=True)

@@ -1,5 +1,4 @@
-def hex_to_rgb(color):
-    return [int(color[1:3], 16), int(color[3:5], 16), int(color[5:], 16)]
+from utils import hex_to_rgb
 
 
 def normalize(color):
