@@ -24,7 +24,6 @@ def get_random_color(prev_color):
         "#FF0066",
         "#5D74CB",
         "#7E8712",
-        "#777777",
         "#FF00FF",
         "#FF0000",
         "#239E9E",
