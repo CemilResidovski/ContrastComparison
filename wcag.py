@@ -33,7 +33,7 @@ def get_contrast(lum):
     )
 
 
-def get_wcag_result(bg_color, yiq=False):
+def get_wcag_result(bg_color):
     # bg RGB
     bg_color = hex_to_rgb(bg_color)
 
