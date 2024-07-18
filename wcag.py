@@ -41,6 +41,6 @@ def get_wcag_result(bg_color):
     bg_norm = normalize(bg_color)
 
     # Get luminance
-    L_b = get_luminance(bg_norm) + 0.05
+    bg_luminance = get_luminance(bg_norm) + 0.05
 
-    return get_contrast(L_b)
+    return get_contrast(bg_luminance)
