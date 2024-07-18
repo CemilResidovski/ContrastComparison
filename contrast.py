@@ -94,3 +94,34 @@ with inputs:
     info = st.expander("So what's all this then?")
     info_text = utils.info()
     info.markdown(info_text, unsafe_allow_html=True)
+
+    # Add slider for red value selection
+    r = st.slider("Select red value", 0, 255, 0)
+
+    # Load the corresponding JSON file
+    d = []
+    try:
+        with open(f"results/{r}.json") as f:
+            diffs = f.read().splitlines()
+            for l in diffs:
+                if len(l) > 1:
+                    d.append(l.split(", "))
+    except FileNotFoundError:
+        st.error("File not found. Make sure the file exists.")
+        diffs = []
+
+    # Visualize the color differences in a 255x255 grid
+    pixel_container = st.container()
+    with pixel_container:
+        st.subheader(f"Visualizing color differences for red value: {r}")
+
+        # Generate pixel HTML for the selected red value
+        pixel_html = "<div style='display: grid; grid-template-columns: repeat(255, 1px); grid-template-rows: repeat(255, 1px);'>"
+        for g in range(0, 256):
+            for b in range(0, 256):
+                if ([g, b]) in d:
+                    pixel_html += f"<div style='width: 1px; height: 1px; background-color: ({r}, {g}, {b}) !important;'></div>"
+                else:
+                    pixel_html += f"<div style='width: 1px; height: 1px; background-color: 'black';'></div>"
+        pixel_html += "</div>"
+        st.markdown(pixel_html, unsafe_allow_html=True)
