@@ -59,7 +59,7 @@ with inputs:
     left.write(f"Contrast: {wcag_contrast}:1. {fetch_wcag_reqs(wcag_contrast)}")
 
     ### YIQ ###
-    yiq_color, yiq_result = yiq.get_contrast_color(bg_c)
+    yiq_color, yiq_result = yiq.get_yiq_result(bg_c)
 
     right.subheader("YIQ")
     yiq_result_text = f"YIQ result: {round(yiq_result, 2)}. "
