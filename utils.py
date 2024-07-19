@@ -43,12 +43,20 @@ def result(background_color, color, contrast):
     return result
 
 
+def intro():
+    return "For a given background color, will white or black foreground text color be more visible?  \n\nThis web app compares [WCAG](https://www.w3.org/TR/WCAG20-TECHS/G18.html) (ISO-9241) with [YIQ](https://24ways.org/2010/calculating-color-contrast) color contrast, and checks which WCAG requirements the foreground text color clears."
+
+
 def info():
-    info = """This app sets the text color between black and white for the highest contrast between foreground and background color.<br><br>
-    You can see it as essentially "According to the background color, should this text have dark or bright color?"<br><br>
-    There's a couple of different ways to calculate the luminance of colors, and thereof the contrast between them for better accessibility. This app calculates it according to WCAG's guidelines and YIQ's color space.<br><br>
-    There's nothing really bad about WCAG guidelines (fun fact, for any solid background color, white or black text will always offer a WCAG-compliant contrast higher than 4.5:1! AA standard for normal text will always be fulfilled), I just sometimes prefer the YIQ result, and you might too.<br><br>
-    You can keep pressing the button above to get random colors where WCAG and YIQ returns different "best text color" due to their results."""
+    info = """This app determines whether black or white text will provide the highest contrast against a given background color.
+
+Think of it as asking, "Given this background color, should the text be dark or bright?"
+
+There are different methods to calculate the luminance and contrast of colors for better accessibility. This app uses the WCAG guidelines and the YIQ color space to perform these calculations. The YIQ method is also commonly used for creating greyscale images.
+
+While WCAG guidelines are effective (fun fact: for any solid background color, white or black text will always meet the WCAG-compliant contrast ratio of 4.5:1 for normal text, fulfilling the AA standard), I sometimes prefer the YIQ results, and you might too.
+
+You can keep pressing the button above to get random background colors where WCAG and YIQ recommend different text colors due to their differing calculations."""
     return info
 
 

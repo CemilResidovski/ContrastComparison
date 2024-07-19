@@ -9,9 +9,7 @@ inputs = st.container()
 
 with header:
     st.header("Combined color contrast comparator")
-    st.write(
-        "For a given background color, will white or black foreground text color be more visible?  \n\nThis web app compares [WCAG](https://www.w3.org/TR/WCAG20-TECHS/G18.html) (ISO-9241) with [YIQ](https://24ways.org/2010/calculating-color-contrast) color contrast, and checks which WCAG requirements the foreground text color clears."
-    )
+    st.write(utils.intro())
 
     left, right = st.columns(2)
 
@@ -34,7 +32,11 @@ with inputs:
     left.write(f"Contrast: {wcag_contrast}:1. {utils.fetch_wcag_reqs(wcag_contrast)}")
 
     ### YIQ ###
-    yiq_color, yiq_result = yiq.get_yiq_result(bg_c)
+    if utils.format_hex(bg_c)[1] <= "DA":
+        yiq_color, yiq_result = yiq.get_yiq_result(bg_c)
+    else:
+        yiq_color = wcag_color
+        yiq_result = None
 
     right.subheader("YIQ")
     yiq_result_text = f"YIQ result: {yiq_result}. "
@@ -52,19 +54,19 @@ with inputs:
     right.write(yiq_result_text)
 
     with st.expander("How would this look in greyscale?"):
-        greyscaled_bg_color = f"rgb({yiq_result}, {yiq_result}, {yiq_result})"
+        grey = f"rgb({yiq_result}, {yiq_result}, {yiq_result})"
         left_grey, right_grey = st.columns(2)
         left_grey.subheader("WCAG greyscale")
-        wcag_greyscale = utils.result(
-            greyscaled_bg_color,
+        wcag_grey = utils.result(
+            grey,
             wcag_color,
             wcag_contrast,
         )
-        left_grey.markdown(wcag_greyscale, unsafe_allow_html=True)
+        left_grey.markdown(wcag_grey, unsafe_allow_html=True)
 
         right_grey.subheader("YIQ greyscale")
-        yiq_greyscale = utils.result(greyscaled_bg_color, yiq_color, yiq_contrast)
-        right_grey.markdown(yiq_greyscale, unsafe_allow_html=True)
+        yiq_grey = utils.result(grey, yiq_color, yiq_contrast)
+        right_grey.markdown(yiq_grey, unsafe_allow_html=True)
 
     info = st.expander("So what's all this then?")
     info_text = utils.info()
