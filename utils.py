@@ -1,8 +1,29 @@
-def hex_to_rgb(color):
+import random
+
+
+def fetch_wcag_reqs(contrast):
+    if contrast >= 7:
+        return "  \nContrast higher than 7.  \nLevel AAA reached for normal text."
+    elif contrast >= 4.5:
+        return "  \nContrast higher than 4.5, lower than 7.  \nLevel AAA reached for large text, AA for normal text."
+    elif contrast >= 3:
+        return "  \nContrast higher than 3, lower than 4.5.  \nLevel AA reached for large text and requirements for graphics and user interface components met."
+    else:
+        return "  \nContrast lower than 3.  \nNo WCAG requirements met."
+
+
+def format_hex(color):
     if isinstance(color, tuple) and len(color) == 3:
         return color
     color = color.lstrip("#")
-    return tuple(int(color[i : i + 2], 16) for i in (0, 2, 4))
+    return [color[i : i + 2] for i in range(0, len(color), 2)]
+
+
+def hex_to_rgb(color):
+    if isinstance(color, tuple) and len(color) == 3:
+        return color
+    color = format_hex(color)
+    return tuple(int(c, 16) for c in color)
 
 
 def result(background_color, color, contrast):
@@ -29,3 +50,22 @@ def info():
     There's nothing really bad about WCAG guidelines (fun fact, for any solid background color, white or black text will always offer a WCAG-compliant contrast higher than 4.5:1! AA standard for normal text will always be fulfilled), I just sometimes prefer the YIQ result, and you might too.<br><br>
     You can keep pressing the button above to get random colors where WCAG and YIQ returns different "best text color" due to their results."""
     return info
+
+
+def get_random_color(prev_color):
+    random_colors = [
+        "#009F75",
+        "#D54799",
+        "#FF0066",
+        "#5D74CB",
+        "#7E8712",
+        "#FF00FF",
+        "#EF0000",
+        "#239E9E",
+        "#00A8FF",
+        "#00DA00",
+        "#FF26FF",
+    ]
+    if prev_color in random_colors:
+        random_colors.remove(prev_color)
+    return random.choice(random_colors)

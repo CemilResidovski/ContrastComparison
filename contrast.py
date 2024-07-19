@@ -2,37 +2,9 @@ import streamlit as st
 import utils
 import yiq
 import wcag
-import random
 
 header = st.container()
 inputs = st.container()
-
-
-def fetch_wcag_reqs(contrast):
-    if contrast >= 7:
-        return "  \nContrast higher than 7.  \nLevel AAA reached for normal text."
-    elif contrast >= 4.5:
-        return "  \nContrast higher than 4.5, lower than 7.  \nLevel AAA reached for large text, AA for normal text."
-    elif contrast >= 3:
-        return "  \nContrast higher than 3, lower than 4.5.  \nLevel AA reached for large text and requirements for graphics and user interface components met."
-    else:
-        return "  \nContrast lower than 3.  \nNo WCAG requirements met."
-
-
-def get_random_color(prev_color):
-    random_colors = [
-        "#009F75",
-        "#D54799",
-        "#FF0066",
-        "#5D74CB",
-        "#7E8712",
-        "#FF00FF",
-        "#FF0000",
-        "#239E9E",
-    ]
-    if prev_color in random_colors:
-        random_colors.remove(prev_color)
-    return random.choice(random_colors)
 
 
 with header:
@@ -42,11 +14,12 @@ with header:
     )
 
     left, right = st.columns(2)
+
     bg_c = left.color_picker("Choose the background color", "#7F7F7F").upper()
+    if right.button("Get random conflicting color"):
+        bg_c = utils.get_random_color(bg_c)
     left.text(bg_c)
 
-    if right.button("Get random conflicting color"):
-        bg_c = get_random_color(bg_c)
 
 with inputs:
 
@@ -58,17 +31,17 @@ with inputs:
     left.subheader("WCAG")
     wcag_contrast_box = utils.result(bg_c, wcag_color, wcag_contrast)
     left.markdown(wcag_contrast_box, unsafe_allow_html=True)
-    left.write(f"Contrast: {wcag_contrast}:1. {fetch_wcag_reqs(wcag_contrast)}")
+    left.write(f"Contrast: {wcag_contrast}:1. {utils.fetch_wcag_reqs(wcag_contrast)}")
 
     ### YIQ ###
     yiq_color, yiq_result = yiq.get_yiq_result(bg_c)
 
     right.subheader("YIQ")
-    yiq_result_text = f"YIQ result: {round(yiq_result, 2)}. "
+    yiq_result_text = f"YIQ result: {yiq_result}. "
 
     if yiq_color != wcag_color:
         yiq_result_text += (
-            f"WCAG contrast: {yiq_contrast}:1. {fetch_wcag_reqs(yiq_contrast)}"
+            f"WCAG contrast: {yiq_contrast}:1. {utils.fetch_wcag_reqs(yiq_contrast)}"
         )
     else:
         yiq_contrast = wcag_contrast
