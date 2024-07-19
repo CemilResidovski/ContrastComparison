@@ -15,6 +15,8 @@ def fetch_wcag_reqs(contrast):
         return "  \nContrast higher than 4.5, lower than 7.  \nLevel AAA reached for large text, AA for normal text."
     elif contrast >= 3:
         return "  \nContrast higher than 3, lower than 4.5.  \nLevel AA reached for large text and requirements for graphics and user interface components met."
+    else:
+        return "  \nContrast lower than 3.  \nNo WCAG requirements met."
 
 
 def get_random_color(prev_color):
