@@ -5,6 +5,7 @@ import wcag
 
 header = st.container()
 inputs = st.container()
+colors = st.container()
 
 
 with header:
@@ -67,6 +68,23 @@ with inputs:
         right_grey.subheader("YIQ greyscale")
         yiq_grey = utils.result(grey, yiq_color, yiq_contrast)
         right_grey.markdown(yiq_grey, unsafe_allow_html=True)
+
+with colors:
+    with st.expander("Show color spectrums"):
+        r, g, b = st.columns(3)
+        c = utils.hex_to_rgb(bg_c)
+
+        r.image(f"r/{c[0]}.png")
+
+        if c[1] >= 219:
+            g.image("g/219.png")
+        else:
+            g.image(f"g/{c[1]}.png")
+
+        b.image(f"b/{c[2]}.png")
+        r.caption(f"Colors with differing foreground colors for red value of {c[0]}")
+        g.caption(f"Colors with differing foreground colors for green value of {c[1]}")
+        b.caption(f"Colors with differing foreground colors for blue value of {c[2]}")
 
     info = st.expander("So what's all this then?")
     info_text = utils.info()
