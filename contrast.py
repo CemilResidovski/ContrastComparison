@@ -5,6 +5,29 @@ import yiq
 import wcag
 import random
 
+YIQ_W = [299, 587, 114]  # R, G, B
+WCAG_W = [0.2126, 0.7152, 0.0722]
+
+# Raw luminance threshold for WCAG contrast ratio of 4.5:1, from the contrast ratio formula.
+# Used for the "decision boundary" between black and white text in WCAG.
+# Assuming black or white foreground text color, a ratio of 4.5:1 will always be met.
+WCAG_LUM_THRESHOLD = np.sqrt(0.0525) - 0.05
+
+
+# This is the same method used in wcag.py, but easier and faster to scale for the whole color space.
+def srgb_normalize(ch):
+    ch_n = ch / 255.0
+    return np.where(ch_n <= 0.03928, ch_n / 12.92, ((ch_n + 0.055) / 1.055) ** 2.4)
+
+
+def srgb_denormalize(ch_n):
+    ch_n = np.clip(ch_n, 0, None)
+    ch_linear = np.where(
+        ch_n <= 0.003040, ch_n * 12.92, ch_n ** (1 / 2.4) * 1.055 - 0.055
+    )
+    return ch_linear * 255.0
+
+
 header = st.container()
 inputs = st.container()
 
@@ -16,22 +39,25 @@ def fetch_wcag_reqs(contrast):
         return "  \nContrast higher than 4.5, lower than 7.  \nLevel AAA reached for large text, AA for normal text."
     elif contrast >= 3:
         return "  \nContrast higher than 3, lower than 4.5.  \nLevel AA reached for large text and requirements for graphics and user interface components met."
+    else:
+        return "  \nContrast lower than 3.  \nNo WCAG contrast requirements met."
 
 
-def get_random_color(prev_color):
-    random_colors = [
-        "#009F75",
-        "#D54799",
-        "#FF0066",
-        "#5D74CB",
-        "#7E8712",
-        "#FF00FF",
-        "#FF0000",
-        "#00A4FE",
-    ]
-    if prev_color in random_colors:
-        random_colors.remove(prev_color)
-    return random.choice(random_colors)
+RANDOM_COLORS = [
+    "#009F75",
+    "#D54799",
+    "#FF0066",
+    "#5D74CB",
+    "#7E8712",
+    "#FF00FF",
+    "#FF0000",
+    "#00A4FE",
+]
+
+
+def randomize_color():
+    choices = [c for c in RANDOM_COLORS if c != st.session_state.bg_color]
+    st.session_state.bg_color = random.choice(choices)
 
 
 with header:
@@ -41,11 +67,10 @@ with header:
     )
 
     left, right = st.columns(2)
-    bg_c = left.color_picker("Choose the background color", "#7F7F7F").upper()
+    bg_c = left.color_picker("Choose the background color", "#7F7F7F", key="bg_color").upper()
     left.text(bg_c)
 
-    if right.button("Get random conflicting color"):
-        bg_c = get_random_color(bg_c)
+    right.button("Get random conflicting color", on_click=randomize_color)
 
 with inputs:
 
@@ -109,21 +134,6 @@ with inputs:
     # The disagreement region is always a contiguous band along the free channel axis.
     # Instead of evaluating every pixel, analytically solve each algorithm's flip point.
     # Mark the band as "disagreement" and visualize.
-    YIQ_W = [299, 587, 114]  # R, G, B
-    WCAG_W = [0.2126, 0.7152, 0.0722]
-    WCAG_LUM_THRESHOLD = np.sqrt(0.0525) - 0.05
-
-    def srgb_normalize(ch):
-        ch_n = ch / 255.0
-        return np.where(ch_n <= 0.03928, ch_n / 12.92, ((ch_n + 0.055) / 1.055) ** 2.4)
-
-    def srgb_denormalize(ch_n):
-        ch_n = np.clip(ch_n, 0, None)
-        ch_linear = np.where(
-            ch_n <= 0.003040, ch_n * 12.92, ch_n ** (1 / 2.4) * 1.055 - 0.055
-        )
-        return ch_linear * 255.0
-
     fixed_idx = ["Red", "Green", "Blue"].index(channel)
     free = [i for i in range(3) if i != fixed_idx]
     row_idx, col_idx = free
