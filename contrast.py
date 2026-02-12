@@ -1,4 +1,5 @@
 import streamlit as st
+import numpy as np
 import utils
 import yiq
 import wcag
@@ -26,7 +27,7 @@ def get_random_color(prev_color):
         "#7E8712",
         "#FF00FF",
         "#FF0000",
-        "#239E9E",
+        "#00A4FE",
     ]
     if prev_color in random_colors:
         random_colors.remove(prev_color)
@@ -95,33 +96,69 @@ with inputs:
     info_text = utils.info()
     info.markdown(info_text, unsafe_allow_html=True)
 
-    # Add slider for red value selection
-    r = st.slider("Select red value", 0, 255, 0)
+    st.subheader("Where do WCAG and YIQ disagree?")
+    st.write(
+        "For these colors, WCAG and YIQ return different 'best text color'. "
+        "Bright pixels = disagreement, dimmed pixels = agreement."
+    )
 
-    # Load the corresponding JSON file
-    d = []
-    try:
-        with open(f"results/{r}.json") as f:
-            diffs = f.read().splitlines()
-            for l in diffs:
-                if len(l) > 1:
-                    d.append(l.split(", "))
-    except FileNotFoundError:
-        st.error("File not found. Make sure the file exists.")
-        diffs = []
+    left_ctrl, right_ctrl = st.columns(2)
+    channel = left_ctrl.selectbox("Fixed channel", ["Red", "Green", "Blue"])
+    value = right_ctrl.slider(f"{channel} value", 0, 255, 128)
 
-    # Visualize the color differences in a 255x255 grid
-    pixel_container = st.container()
-    with pixel_container:
-        st.subheader(f"Visualizing color differences for red value: {r}")
+    # The disagreement region is always a contiguous band along the free channel axis.
+    # Instead of evaluating every pixel, analytically solve each algorithm's flip point.
+    # Mark the band as "disagreement" and visualize.
+    YIQ_W = [299, 587, 114]  # R, G, B
+    WCAG_W = [0.2126, 0.7152, 0.0722]
+    WCAG_LUM_THRESHOLD = np.sqrt(0.0525) - 0.05
 
-        # Generate pixel HTML for the selected red value
-        pixel_html = "<div style='display: grid; grid-template-columns: repeat(255, 1px); grid-template-rows: repeat(255, 1px);'>"
-        for g in range(0, 256):
-            for b in range(0, 256):
-                if ([g, b]) in d:
-                    pixel_html += f"<div style='width: 1px; height: 1px; background-color: ({r}, {g}, {b}) !important;'></div>"
-                else:
-                    pixel_html += f"<div style='width: 1px; height: 1px; background-color: 'black';'></div>"
-        pixel_html += "</div>"
-        st.markdown(pixel_html, unsafe_allow_html=True)
+    def srgb_normalize(ch):
+        ch_n = ch / 255.0
+        return np.where(ch_n <= 0.03928, ch_n / 12.92, ((ch_n + 0.055) / 1.055) ** 2.4)
+
+    def srgb_denormalize(ch_n):
+        ch_n = np.clip(ch_n, 0, None)
+        ch_linear = np.where(
+            ch_n <= 0.003040, ch_n * 12.92, ch_n ** (1 / 2.4) * 1.055 - 0.055
+        )
+        return ch_linear * 255.0
+
+    fixed_idx = ["Red", "Green", "Blue"].index(channel)
+    free = [i for i in range(3) if i != fixed_idx]
+    row_idx, col_idx = free
+
+    row_axis = np.arange(256, dtype=np.float64)
+    col_axis = np.arange(256, dtype=np.float64)
+
+    # YIQ flip point: solve (fixed*w_f + row*w_r + col*w_c)/1000 = 128 for col
+    col_yiq = (128000 - value * YIQ_W[fixed_idx] - row_axis * YIQ_W[row_idx]) / YIQ_W[
+        col_idx
+    ]
+
+    # WCAG flip point: solve 0.2126*R_n + 0.7152*G_n + 0.0722*B_n = threshold for col
+    fixed_n = srgb_normalize(np.array([value], dtype=np.float64))[0]
+    row_n = srgb_normalize(row_axis)
+    col_n_target = (
+        WCAG_LUM_THRESHOLD - WCAG_W[fixed_idx] * fixed_n - WCAG_W[row_idx] * row_n
+    ) / WCAG_W[col_idx]
+    col_wcag = srgb_denormalize(col_n_target)
+
+    # Disagreement = pixels between the two flip points
+    low = np.minimum(col_yiq, col_wcag)
+    high = np.maximum(col_yiq, col_wcag)
+    disagree = (col_axis[np.newaxis, :] >= np.ceil(low[:, np.newaxis])) & (
+        col_axis[np.newaxis, :] < np.ceil(high[:, np.newaxis])
+    )
+
+    # Build RGB image
+    row_grid, col_grid = np.meshgrid(row_axis, col_axis, indexing="ij")
+    channels = [None, None, None]
+    channels[fixed_idx] = np.full_like(row_grid, value)
+    channels[row_idx] = row_grid
+    channels[col_idx] = col_grid
+    img = np.stack(channels, axis=-1).astype(np.uint8)
+    dimmed = (img * 0.3).astype(np.uint8)
+    result_img = np.where(disagree[..., np.newaxis], img, dimmed)
+
+    st.image(result_img, caption=f"{channel} = {value}", width=512)
