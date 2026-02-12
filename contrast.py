@@ -29,6 +29,8 @@ RANDOM_COLORS = [
     "#FF5800",
     "#FF00F8",
     "#B058D0",
+    "#7F7F7F",
+    "#02A7FF",
 ]
 
 
@@ -45,9 +47,9 @@ with header:
     )
 
     left, right = st.columns(2)
-    bg_c = left.color_picker(
-        "Choose the background color", "#7F7F7F", key="bg_color"
-    ).upper()
+    if "bg_color" not in st.session_state:
+        st.session_state.bg_color = "#D54799"
+    bg_c = left.color_picker("Choose the background color", key="bg_color").upper()
     left.text(bg_c)
 
     right.button("Get random conflicting color", on_click=randomize_color)
