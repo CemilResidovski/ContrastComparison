@@ -23,17 +23,18 @@ def fetch_wcag_reqs(contrast):
 RANDOM_COLORS = [
     "#009F75",
     "#D54799",
-    "#FF0066",
     "#5D74CB",
     "#7E8712",
-    "#FF00FF",
-    "#FF0000",
-    "#00A4FE",
+    "#8D70B0",
+    "#FF5800",
+    "#FF00F8",
+    "#B058D0",
 ]
 
 
 def randomize_color():
-    choices = [c for c in RANDOM_COLORS if c != st.session_state.bg_color]
+    current = st.session_state.bg_color.upper()
+    choices = [c for c in RANDOM_COLORS if c != current]
     st.session_state.bg_color = random.choice(choices)
 
 
@@ -44,7 +45,9 @@ with header:
     )
 
     left, right = st.columns(2)
-    bg_c = left.color_picker("Choose the background color", "#7F7F7F", key="bg_color").upper()
+    bg_c = left.color_picker(
+        "Choose the background color", "#7F7F7F", key="bg_color"
+    ).upper()
     left.text(bg_c)
 
     right.button("Get random conflicting color", on_click=randomize_color)
