@@ -18,8 +18,9 @@ def get_luminance(color):
     return 0.2126 * color[0] + 0.7152 * color[1] + 0.0722 * color[2]
 
 
-# Observe that the result in index 2 is the reverse of the WCAG contrast.
-# Make sure this is only used when YIQ returns the opposite color of WCAG.
+# Returns [best_color, best_contrast, other_contrast].
+# best_contrast is the WCAG ratio for the winning color.
+# other_contrast is the WCAG ratio for the opposite color (used when YIQ disagrees).
 def get_contrast(lum):
     lum_black = 0.05
     lum_white = 1.05
